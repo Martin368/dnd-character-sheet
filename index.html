@@ -271,100 +271,98 @@
         };
 
         const publicPersona = {
-            name: "Alexander Spinoza",
-            title: "z Vyšných Ružbachov",
-            theme: "illusion",
-            quote: '"Šéfko, to je taký debil, to je taký debil!"\n - vrchný učeň Francius Dragonovský',
-            // Identita
-            race: "Human",
-            class: "Wizard",
-            level: "1",
-            alignment: "True Neutral",
-            // Koniec identity
-            story: `
-                <div class="p-4 rounded-lg bg-gray-900/50 border-l-4 border-blue-500">
-                    <h4 class="text-xl font-semibold mb-2 text-gray-200">Deklasifikované informácie</h4>
-                    <p class="text-base leading-relaxed mb-2">
-                        Alexander pochádzal z Vyšných Ružbachov, a práve odtiaľ získal prezývku Vyšný, ktorá sa s ním niesla celý život. Bol nechcené dieťa, ktoré našiel a vychoval odľahlý kruh Druidov. Tí ho naučili základy prírodnej mágie, no jeho túžba po komplexnej a hlbšej moci čoskoro spôsobila nezhody.
-                    <p class="text-base leading-relaxed mb-2">
-                        Kruh opustil a istý čas využíval svoje nadanie na zločin, pričom si uvedomil, že skutočná moc sveta spočíva v ovládaní myslí iných. Netrvalo dlho a našiel si cestu k záhadnému arcimágovi Lysandrovi, majstrovi ilúzií, ku ktorému sa pridal ako učeň.
-                    </p>
-                    <p class="text-base leading-relaxed">
-                        Teraz slúži Lysandrovi a vydáva sa na misiu získať realitu ohýbajúci grimoár známy ako "Kniha nezvratných axióm" skôr než padne do nevhodných rúk.
-                    </p>
-                </div>
-            `,
-            combatStats: [
-                { label: "Armor Class", value: "13", sub: "", color: "text-blue-400" },
-                { label: "Hit Points", value: "8", sub: "", color: "text-blue-400" },
-                { label: "Initiative", value: "+5", sub: "", color: "text-blue-400" }, 
-            ],
-            abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
-            spellSlots: { level1: 3, note: "" }
-            // --- Nove Vlastnosti ---
-            ephemeralMechanics: {
-                buff: {
-                    title: "Volatilná Energia (Illusion)",
-                    description: "Alexander môže usmerniť nestálu arkánnu energiu v jeho okolí, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
-                    cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
-                },
-                debuff: {
-                    title: "Obmedzené Liečenie (Illusion)",
-                    description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
-                    restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
-                }
+        name: "Alexander Spinoza",
+        title: "z Vyšných Ružbachov",
+        theme: "illusion",
+        quote: '"Šéfko, to je taký debil, to je taký debil!"\n - vrchný učeň Francius Dragonovský',
+        // Identita
+        race: "Human",
+        class: "Wizard",
+        level: "1",
+        alignment: "True Neutral",
+        // Koniec identity
+        story: `
+            <div class="p-4 rounded-lg bg-gray-900/50 border-l-4 border-blue-500">
+                <h4 class="text-xl font-semibold mb-2 text-gray-200">Deklasifikované informácie</h4>
+                <p class="text-base leading-relaxed mb-2">
+                    Alexander pochádzal z Vyšných Ružbachov, a práve odtiaľ získal prezývku Vyšný, ktorá sa s ním niesla celý život. Bol nechcené dieťa, ktoré našiel a vychoval odľahlý kruh Druidov. Tí ho naučili základy prírodnej mágie, no jeho túžba po komplexnej a hlbšej moci čoskoro spôsobila nezhody.
+                <p class="text-base leading-relaxed mb-2">
+                    Kruh opustil a istý čas využíval svoje nadanie na zločin, pričom si uvedomil, že skutočná moc sveta spočíva v ovládaní myslí iných. Netrvalo dlho a našiel si cestu k záhadnému arcimágovi Lysandrovi, majstrovi ilúzií, ku ktorému sa pridal ako učeň.
+                </p>
+                <p class="text-base leading-relaxed">
+                    Teraz slúži Lysandrovi a vydáva sa na misiu získať realitu ohýbajúci grimoár známy ako "Kniha nezvratných axióm" skôr než padne do nevhodných rúk.
+                </p>
+            </div>
+        `,
+        combatStats: [
+            { label: "Armor Class", value: "13", sub: "", color: "text-blue-400" },
+            { label: "Hit Points", value: "8", sub: "", color: "text-blue-400" },
+            { label: "Initiative", value: "+5", sub: "", color: "text-blue-400" }, 
+        ],
+        abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
+        spellSlots: { level1: 3, note: "" },
+        // --- VLASTNOSTI PRE ILLUSION ---
+        ephemeralMechanics: {
+            buff: {
+                title: "Volatilná Energia (Illusion)",
+                description: "Alexander môže usmerniť nestálu arkánnu energiu v jeho oklí, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
+                cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
+            },
+            debuff: {
+                title: "Obmedzené Liečenie (Illusion)",
+                description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
+                restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
             }
         }
-            
-        };
+    };
 
-        const truePersona = {
-            name: "LYSANDER (KLON L-07)",
-            title: "Tiež je z Ružbachov",
-            theme: "truth",
-            quote: '"Postrádateľný? Možno. No stále som stelesnenou vôľou arcimága Lysandra."',
-            // Identita
-            race: "Energetická Ilúzia",
-            class: "Wizard",
-            level: "1",
-            alignment: "Neutral Evil ",
-            // Koniec identity
-            story: `
-                <div class="p-4 rounded-lg border-l-4 covert-indicator border-red-500/70 bg-red-900/20">
-                    <h4 class="text-xl font-semibold mb-2 uppercase text-red-300">Pravda</h4>
-                    <p class="text-base leading-relaxed mb-2">
-                        Alexander nie je učeň, ale dokonale vytvorený, mladší klon amotného paranoidného arcimága Lysandra. Je to Energetická Ilúzia navrhnutá pre maximálny efekt.
-                    </p>
-                    <p class="text-base leading-relaxed mb-2">
-                        Lysander, nechcel riskovať svoj vlastný život, a tak vytvoril Alexandra ako ideálneho agenta pre túto misiu. Zachoval mu len útržky spomienok a zručnosti, ktoré považoval za nevyhnutné.
-                    </p>
-                    <p class="text-base leading-relaxed">
-                        Postrádateľný, a predsa hnaný jedinou motiváciou: získať OP grimoár. Ak Alexander zlyhá, Lysander jednoducho aktivuje ďalšiu kópiu. Jeho život nemá hodnotu mimo úspechu misie.
-                    </p>
-                </div>
-            `,
-            combatStats: [
-                { label: "Armor Class", value: "13", sub: "", color: "text-red-400" },
-                { label: "Hit Points", value: "8", sub: "", color: "text-red-400" },
-                { label: "Initiative", value: "+5", sub: "", color: "text-red-400" },
-                
-            ],
-            abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
-            spellSlots: { level1: 3, level2: 3, note: "" } 
-            ephemeralMechanics: {
-                buff: {
-                    title: "Volatilná Energia (Illusion)",
-                    description: "Alexander môže usmerniť nestálu arkánnu energiu, ktorá tvorí jeho telo, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
-                    cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
-                },
-                debuff: {
-                    title: "Obmedzené Liečenie (Illusion)",
-                    description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
-                    restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
-                }
+    const truePersona = {
+        name: "LYSANDER (KLON L-07)",
+        title: "Tiež je z Ružbachov",
+        theme: "truth",
+        quote: '"Postrádateľný? Možno. No stále som stelesnenou vôľou arcimága Lysandra."',
+        // Identita
+        race: "Energetická Ilúzia",
+        class: "Wizard",
+        level: "1",
+        alignment: "Neutral Evil ",
+        // Koniec identity
+        story: `
+            <div class="p-4 rounded-lg border-l-4 covert-indicator border-red-500/70 bg-red-900/20">
+                <h4 class="text-xl font-semibold mb-2 uppercase text-red-300">Pravda</h4>
+                <p class="text-base leading-relaxed mb-2">
+                    Alexander nie je učeň, ale dokonale vytvorený, mladší klon amotného paranoidného arcimága Lysandra. Je to Energetická Ilúzia navrhnutá pre maximálny efekt.
+                </p>
+                <p class="text-base leading-relaxed mb-2">
+                    Lysander, nechcel riskovať svoj vlastný život, a tak vytvoril Alexandra ako ideálneho agenta pre túto misiu. Zachoval mu len útržky spomienok a zručnosti, ktoré považoval za nevyhnutné.
+                </p>
+                <p class="text-base leading-relaxed">
+                    Postrádateľný, a predsa hnaný jedinou motiváciou: získať OP grimoár. Ak Alexander zlyhá, Lysander jednoducho aktivuje ďalšiu kópiu. Jeho život nemá hodnotu mimo úspechu misie.
+                </p>
+            </div>
+        `,
+        combatStats: [
+            { label: "Armor Class", value: "13", sub: "", color: "text-red-400" },
+            { label: "Hit Points", value: "8", sub: "", color: "text-red-400" },
+            { label: "Initiative", value: "+5", sub: "", color: "text-red-400" },
+            
+        ],
+        abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
+        spellSlots: { level1: 3, level2: 3, note: "" }, 
+        // --- VLASTNOSTI PRE TRUTH (FIXED) ---
+        ephemeralMechanics: {
+            buff: {
+                title: "Klonovacia Stabilita (Truth)",
+                description: "Telo Lysandra-Klona je stvorený na absorbovanie a re-routing energetických útokov, čím si zabezpečuje krátkodobú imunitu voči poškodeniu energiou.",
+                cost: "Získava <strong>odolnosť voči Energetickému poškodeniu</strong> (Force Damage) na 1 kolo, ak bol práve zasiahnutý Energetickým poškodením.",
+            },
+            debuff: {
+                title: "Zraniteľnosť pri Poškodení (Truth)",
+                description: "Poškodenie tela spúšťa energetickú nestabilitu, ktorá je pre klon nebezpečná.",
+                restriction: "Získava <strong>zraniteľnosť voči Nekrotickému poškodeniu</strong> (Necrotic Damage).",
             }
         }
-        };
+    };
 
         // --- Kontrola hudby ---
         function setupMusicPlayer() {
@@ -650,14 +648,12 @@
             updateMusicWidget(); 
         };
     </script>
-
-     </div> 
-    </div> 
-
-    <script>
 </body>
 
 </html>
+
+
+
 
 
 
