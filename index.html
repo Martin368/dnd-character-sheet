@@ -269,22 +269,6 @@
                 { name: "Silent Image", level: 1, ritual: false }
             ]
         };
-        
-        // Veci pre vlastnosti
-        const buffDebuffContent = {
-            buff: {
-                title: "Volatilná Energia",
-                description: "Alexander môže usmerniť nestálu arkánnu energiu, ktorá tvorí jeho telo, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
-                cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
-            },
-            debuff: {
-                title: "Obmedzené Liečenie",
-                description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
-                restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
-            }
-        };
-        
-
 
         const publicPersona = {
             name: "Alexander Spinoza",
@@ -316,7 +300,21 @@
                 { label: "Initiative", value: "+5", sub: "", color: "text-blue-400" }, 
             ],
             abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
-            spellSlots: { level1: 3, note: "" } 
+            spellSlots: { level1: 3, note: "" }
+            // --- Nove Vlastnosti ---
+            ephemeralMechanics: {
+                buff: {
+                    title: "Volatilná Energia (Illusion)",
+                    description: "Alexander môže usmerniť nestálu arkánnu energiu v jeho okolí, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
+                    cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
+                },
+                debuff: {
+                    title: "Obmedzené Liečenie (Illusion)",
+                    description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
+                    restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
+                }
+            }
+        }
             
         };
 
@@ -353,6 +351,19 @@
             ],
             abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
             spellSlots: { level1: 3, level2: 3, note: "" } 
+            ephemeralMechanics: {
+                buff: {
+                    title: "Volatilná Energia (Illusion)",
+                    description: "Alexander môže usmerniť nestálu arkánnu energiu, ktorá tvorí jeho telo, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
+                    cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
+                },
+                debuff: {
+                    title: "Obmedzené Liečenie (Illusion)",
+                    description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
+                    restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
+                }
+            }
+        }
         };
 
         // --- Kontrola hudby ---
@@ -474,8 +485,10 @@
             }).join('');
         }
         
-        function renderEphemeralMechanics() {
+        function renderEphemeralMechanics(data) {
             const container = document.getElementById('buffDebuffContainer');
+            const buffDebuffContent = data.ephemeralMechanics; // Get the specific mechanics from the persona object
+            
             const buffTheme = isRevealed ? 'border-green-400 bg-green-900/20' : 'border-blue-600 bg-blue-900/10';
             const debuffTheme = isRevealed ? 'border-red-400 bg-red-900/20' : 'border-red-600 bg-red-900/10';
             const costTextColor = isRevealed ? 'text-red-300' : 'text-blue-300';
@@ -483,28 +496,26 @@
             const debuffColor = isRevealed ? 'text-red-300' : 'text-red-300';
 
             container.innerHTML = `
-                <!-- Buff: Energy Casting -->
                 <div class="p-4 rounded-lg border-l-4 ${buffTheme} transition-colors duration-500 shadow-md">
                     <h4 class="text-xl font-semibold mb-1 ${buffColor}">${buffDebuffContent.buff.title}</h4>
                     <p class="text-sm italic text-gray-400 mb-2">${buffDebuffContent.buff.description}</p>
                     <div class="text-sm">
-                        <strong class="${costTextColor}">Cena:</strong> 
+                        <strong class="${costTextColor}">Cena/Efekt:</strong> 
                         ${buffDebuffContent.buff.cost}
                     </div>
                 </div>
 
-                <!-- Debuff: Healing Restriction -->
                 <div class="p-4 rounded-lg border-l-4 ${debuffTheme} transition-colors duration-500 shadow-md">
                     <h4 class="text-xl font-semibold mb-1 ${debuffColor}">${buffDebuffContent.debuff.title}</h4>
                     <p class="text-sm italic text-gray-400 mb-2">${buffDebuffContent.debuff.description}</p>
                     <div class="text-sm">
-                        <strong class="${costTextColor}">Obmedzenie:</strong> 
+                        <strong class="${costTextColor}">Obmedzenie/Efekt:</strong> 
                         ${buffDebuffContent.debuff.restriction}
                     </div>
                 </div>
             `;
             
-            //Zabezpeci ze vsetko svieti jak ma
+            // Zabezpeci ze vsetko svieti jak ma
             const sectionHeader = document.querySelector('#ephemeralSection h3');
             const oppositeTheme = isRevealed ? 'illusion' : 'truth';
             const currentTheme = isRevealed ? 'truth' : 'illusion';
@@ -600,7 +611,7 @@
             renderIdentity(data); // <-- Renderne novu identitu
             renderAbilityScores(data.abilityScores);
             renderCombatStats(data.combatStats);
-            renderEphemeralMechanics();
+            renderEphemeralMechanics(data);
             renderFeatsSkills(featsAndSkills);
             renderSpells(spellsAndCantrips, data.spellSlots);
 
@@ -647,6 +658,7 @@
 </body>
 
 </html>
+
 
 
 
