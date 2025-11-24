@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Šaňo Spin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles for a dark, atmospheric feel focused on Illusion */
+        body {
+            display: block;
+            font-family: 'Cinzel', serif; 
+            background-color: #0d0a15; /* Dark blue/black background */
+            /* Background image: Keep the dark, arcane library setting */
+            background-image: url('');
+            background-size: cover; 
+            background-position: center center;
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            color: #d4d4d4;
+        }
+
+        /* Container for the main content block */
+        .scroll-bg {
+            background-color: rgba(10, 10, 25, 0.95); 
+            box-shadow: 0 0 15px rgba(0, 100, 255, 0.4), 0 0 40px rgba(0, 0, 0, 0.8);
+            border: 2px solid #004d99;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Primary dark blue/sapphire glow */
+        .glow-text-illusion { 
+            color: #4a90e2; 
+            text-shadow: 0 0 8px rgba(74, 144, 226, 0.7);
+            transition: all 0.5s ease-in-out;
+        }
+        
+        /* Secondary menacing red/truth glow */
+        .glow-text-truth { 
+            color: #ff4d4d; /* Bright red */
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.9);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .divider {
+            height: 1px;
+            /* Default illusion divider */
+            background: linear-gradient(to right, transparent, #004d99, transparent);
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .stat-label {
+            color: #a0a0a0;
+        }
+
+        .covert-indicator {
+            border-left-color: #00bfff; /* Subtle dashed border */
+            background-color: rgba(0, 0, 50, 0.5); /* Very dark blue background */
+            color: #b0e0e6; /* Light, ethereal text */
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Transitions for content reveal/update */
+        .content-transition {
+            transition: opacity 0.4s ease-out;
+        }
+
+        /* Utility classes for dynamic glow colors */
+        .text-glow-illusion {
+            color: #60a5fa; /* blue-400 */
+        }
+        .text-glow-truth {
+            color: #f87171; /* red-400 */
+        }
+        #mainContainer {
+    margin: 0 auto; /* Center the container */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 relative">
+
+    <div class="absolute top-6 right-6 z-30 flex flex-col items-end space-y-3">
+    
+        <!-- Toggle Button -->
+        <button onclick="toggleTruth()" id="toggleBtn" class="group flex items-center space-x-2 bg-black/50 hover:bg-black/80 backdrop-blur px-4 py-2 rounded-full border border-gray-700 transition-all hover:border-gray-500 focus:outline-none shadow-lg">
+            <span id="toggleLabel" class="text-xs uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Dispel Illusion</span>
+            <i data-lucide="eye" id="eyeIcon" class="w-5 h-5 text-blue-500 transition-colors duration-500"></i>
+        </button>
+
+        <!-- Music Widget -->
+        <div onclick="toggleMusic()" class="flex items-center space-x-2 p-2 cursor-pointer rounded-full border border-blue-900 bg-blue-900/20 hover:bg-blue-900/40 transition-all duration-300 shadow-xl w-fit">
+            <div class="flex items-center space-x-1">
+                <i data-lucide="music" class="w-4 h-4 text-blue-400"></i>
+                <p class="text-xs tracking-wider text-gray-300 hidden sm:block">Ambient Drone</p>
+            </div>
+            <div id="music-controls" class="flex items-center space-x-1">
+                <span id="music-status" class="text-xs italic text-gray-500 hidden md:block">PAUSED</span>
+                <button id="musicButton" class="w-6 h-6 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-500 transition-colors focus:outline-none shadow-md">
+                    <i data-lucide="play" id="playIcon" class="w-3 h-3 text-white fill-white"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <div class="flex justify-center w-full">
+    <div id="mainContainer" class="scroll-bg max-w-4xl w-full p-6 md:p-10 rounded-xl transition-all duration-500 relative">
+        
+        <!-- HEADER -->
+        <header class="text-center mb-6">
+            <h1 id="charName" class="text-4xl md:text-6xl font-extrabold mb-1 tracking-wider uppercase glow-text-illusion">
+                Alexander Spinoza
+            </h1>
+            <h2 id="charTitle" class="text-xl md:text-3xl text-gray-300 italic">
+                z Vyšných Ružbachov
+            </h1>
+        </header>
+
+        <!-- QUOTE -->
+        <section class="mb-8 text-center content-transition">
+            <p id="quoteText" class="text-gray-400 text-lg md:text-xl italic border-l-4 border-blue-700 pl-4 mx-auto max-w-2xl transition-all duration-500">
+                "Do not trust what you see. Do not trust what you hear. Reality is only the consensus of weak minds. I am here to correct that."
+            </p>
+        </section>
+        
+        <div id="topDivider" class="divider mb-6"></div>
+
+        <!-- IDENTITY (Race & Background) - NEW SECTION -->
+        <section id="identitySection" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 content-transition">
+            <div id="raceBox" class="p-4 rounded-xl border-l-4 border-r-2 border-gray-800 bg-gray-900/40 text-center shadow-inner">
+                <!-- Content injected by JS -->
+            </div>
+            <div id="backgroundBox" class="p-4 rounded-xl border-l-4 border-r-2 border-gray-800 bg-gray-900/40 text-center shadow-inner">
+                <!-- Content injected by JS -->
+            </div>
+            <div id="levelBox" class="p-4 rounded-xl border-l-4 border-r-2 border-gray-800 bg-gray-900/40 text-center shadow-inner">
+                <!-- Content injected by JS -->
+            </div>
+            <div id="alignmentBox" class="p-4 rounded-xl border-l-4 border-r-2 border-gray-800 bg-gray-900/40 text-center shadow-inner">
+                <!-- Content injected by JS -->
+            </div>
+
+        </section>
+        
+    
+</section>
+
+<div id="featuresDivider" class="divider mb-8"></div>
+
+        <!-- STATS -->
+        <section id="statsSection" class="mb-10 content-transition">
+            <h3 class="text-2xl font-bold mb-4 tracking-wider uppercase glow-text-illusion">
+                Stav
+            </h3>
+
+            <!-- Ability Scores (STR, DEX, CON, INT, WIS, CHA) - Injected by JS -->
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-6 text-center">
+            </div>
+
+            <!-- Combat Stats (AC, HP, Initiative, etc.) - Injected by JS -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4 text-center">
+            </div>
+        </section>
+
+        <div id="storyDivider" class="divider mb-8"></div>
+
+        <!-- HISTORY & PURPOSE -->
+        <section class="mb-10 text-gray-400 content-transition">
+            <h3 class="text-2xl font-bold mb-4 tracking-wider uppercase glow-text-illusion">
+                Backstory & Motivácia
+            </h3>
+
+            <div id="storyContent">
+            </div>
+            
+        </section>
+        
+        <!-- EPHEMERAL MECHANICS (BUFFS & DEBUFFS) -->
+        <section id="ephemeralSection" class="text-gray-400 mb-10 content-transition">
+            <h3 class="text-2xl font-bold mb-4 tracking-wider uppercase glow-text-illusion">
+                Vlastnosti
+            </h3>
+            <div id="buffDebuffContainer" class="space-y-6">
+                <!-- Content injected by JS -->
+            </div>
+        </section>
+
+        <!-- FEATS & SKILLS -->
+        <section id="featSection" class="text-gray-400 mb-10 content-transition">
+            <h3 class="text-2xl font-bold mb-4 tracking-wider uppercase glow-text-illusion">
+                Feats & Skills
+            </h3>
+            <div id="featsSkills" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                <!-- Content generated by JS -->
+            </div>
+        </section>
+
+        
+        <div id="spellsDivider" class="divider mb-8"></div>
+        
+        <!-- ARCANE REPERTOIRE -->
+        <section id="magicSection" class="mb-10 text-gray-400 content-transition">
+            <h3 class="text-2xl font-bold mb-4 tracking-wider uppercase glow-text-illusion">
+                Spellbook
+            </h3>
+
+            <!-- Spell Slots (Dynamic based on Illusion/Truth) -->
+            <div id="spellSlots" class="mb-6 p-4 rounded-lg border border-gray-800 bg-gray-900/50">
+                <!-- Content generated by JS -->
+            </div>
+
+            <h4 class="text-xl font-semibold mb-3 tracking-wide glow-text-illusion">Cantrips</h4>
+            <div id="cantripList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                <!-- Content generated by JS -->
+            </div>
+
+            <h4 class="text-xl font-semibold mb-3 tracking-wide glow-text-illusion">Level 1 Spells</h4>
+            <div id="spellList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- Content generated by JS -->
+            </div>
+        </section>
+
+
+        <!-- HIDDEN SOUNDCLOUD EMBED (API) -->
+        <div id="soundcloud-player-container" class="absolute -bottom-full opacity-0 pointer-events-none w-full">
+            <iframe id="sc-iframe" width="100%" height="100" scrolling="no" frameborder="no" allow="autoplay" 
+                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2093163348&color=%23004d99&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"></iframe>
+        </div>
+        
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        let isRevealed = false;
+        let isMusicPlaying = false; 
+        let scIframe; 
+        
+        // --- Character Data Definitions ---
+        
+        // Spells and Cantrips are the same list, but spell slot mastery differs
+        const featsAndSkills = {
+            feats: [
+                {name: "Arcana", desc: "Skill" },
+                {name: "Magic Initiate (Druid)", desc: "Feat" },
+                {name: "History", desc: "Skill" },
+                {name: "Alert", desc: "Feat" },
+                {name: "Investigation", desc: "Skill" },
+            ]
+        };
+        const spellsAndCantrips = {
+            cantrips: [
+                { name: "Minor Illusion", school: "Illusion", desc: "A minor sensory figment." },
+                { name: "Mage Hand", school: "Conjuration", desc: "Invisible telekinetic servant." },
+                { name: "Ray of Frost", school: "Evocation", desc: "Chilling touch to slow foes." },
+                { name: "Druidcraft", school: "Transmutation", desc: "Minor nature manipulation." },
+                { name: "Starry Wisp", school: "Illusion", desc: "A distracting ethereal light." }
+            ],
+            spells: [
+                { name: "Color Spray", level: 1, ritual: false },
+                { name: "Comprehend Languages", level: 1, ritual: true },
+                { name: "Find Familiar", level: 1, ritual: true },
+                { name: "Cure Wounds", level: 1, ritual: false },
+                { name: "Mage Armor", level: 1, ritual: false },
+                { name: "Magic Missile", level: 1, ritual: false },
+                { name: "Shield", level: 1, ritual: false },
+                { name: "Silent Image", level: 1, ritual: false }
+            ]
+        };
+        
+        // Content for the new Buff/Debuff section (static text)
+        const buffDebuffContent = {
+            buff: {
+                title: "Volatilná Energia",
+                description: "Alexander môže usmerniť nestálu arkánnu energiu, ktorá tvorí jeho telo, aby castol akýkoľvek spell, ktorý pozná, bez spotrebovania spell slotu.",
+                cost: "Keď čaruje týmto spôsobom, Alexander okamžite dostane <strong>damage rovný trojnásobku úrovne kúzla</strong> ( 3 HP za level 1 spell).",
+            },
+            debuff: {
+                title: "Obmedzené Liečenie",
+                description: "Jeho telo odmieta obyčajné liečivá, nedokáže sa liečiť nemagickými prostriedkami",
+                restriction: "Nepôsobia naňho liečivé elixíry. HP mu dokáže obnoviť iba magické liečenie alebo prirodzený odpočinok",
+            }
+        };
+        
+
+
+        const publicPersona = {
+            name: "Alexander Spinoza",
+            title: "z Vyšných Ružbachov",
+            theme: "illusion",
+            quote: '"Šéfko, to je taký debil, to je taký debil!"\n - vrchný učeň Francius Dragonovský',
+            // NEW IDENTITY DATA
+            race: "Human",
+            class: "Wizard",
+            level: "1",
+            alignment: "True Neutral",
+            // END NEW IDENTITY DATA
+            story: `
+                <div class="p-4 rounded-lg bg-gray-900/50 border-l-4 border-blue-500">
+                    <h4 class="text-xl font-semibold mb-2 text-gray-200">Deklasifikované informácie</h4>
+                    <p class="text-base leading-relaxed mb-2">
+                        Alexander pochádzal z Vyšných Ružbachov, a práve odtiaľ získal prezývku Vyšný, ktorá sa s ním niesla celý život. Bol nechcené dieťa, ktoré našiel a vychoval odľahlý kruh Druidov. Naučili ho základy prírodnej mágie, no jeho túžba po komplexnej, svetskej moci čoskoro spôsobila napätie.
+                    <p class="text-base leading-relaxed mb-2">
+                        Kruh opustil a istý čas využíval svoje nadanie na drobné zločiny, pričom si uvedomil, že skutočná moc sveta spočíva v ovládaní myslí iných. Netrvalo dlho a našiel si cestu k záhadnému arcimágovi Lysandrovi, majstrovi ilúzií, ku ktorému sa pridal ako učeň.
+                    </p>
+                    <p class="text-base leading-relaxed">
+                        Teraz slúži Lysandrovi a vydáva sa na misiu získať realitu ohýbajúci grimoár známy ako <strong class="text-blue-300">"Kniha nezvratných axióm"</strong> skôr než padne do nevhodných rúk.
+                    </p>
+                </div>
+            `,
+            combatStats: [
+                { label: "Armor Class", value: "13", sub: "", color: "text-blue-400" },
+                { label: "Hit Points", value: "8", sub: "", color: "text-blue-400" },
+                { label: "Initiative", value: "+5", sub: "", color: "text-blue-400" }, 
+            ],
+            abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
+            spellSlots: { level1: 3, note: "" } // Limited illusionist
+            
+        };
+
+        const truePersona = {
+            name: "LYSANDER (KLON L-07)",
+            title: "Tiež je z Ružbachov",
+            theme: "truth",
+            quote: '"Postrádateľný? Možno. No stále som stelesnenou vôľou arcimága Lysandra."',
+            // NEW IDENTITY DATA
+            race: "Energetická Ilúzia",
+            class: "Wizard",
+            level: "1",
+            alignment: "Neutral Evil ",
+            // END NEW IDENTITY DATA
+            story: `
+                <div class="p-4 rounded-lg border-l-4 covert-indicator border-red-500/70 bg-red-900/20">
+                    <h4 class="text-xl font-semibold mb-2 uppercase text-red-300">Pravda (DM EYES ONLY)</h4>
+                    <p class="text-base leading-relaxed mb-2">
+                        Alexander nie je učeň, ale dokonale vytvorený, mladší <strong>klon</strong> amotného paranoidného arcimága Lysandra. Je to <strong class="text-red-400">Energetická Ilúzia</strong> navrhnutá pre maximálny efekt.
+                    </p>
+                    <p class="text-base leading-relaxed mb-2">
+                        Lysander, nechtiac riskovať svoj skutočný život, vytvoril Alexandra ako náhradného agenta pre túto misiu. Zachoval mu len útržky spomienok a zručnosti, ktoré považoval za nevyhnutné.
+                    </p>
+                    <p class="text-base leading-relaxed">
+                        Postrádateľný, a predsa hnaný jedinou motiváciou: získať OP grimoár. Ak Alexander zlyhá, Lysander jednoducho aktivuje ďalšiu kópiu. Jeho život nemá hodnotu mimo úspechu misie.
+                    </p>
+                </div>
+            `,
+            combatStats: [
+                { label: "Armor Class", value: "13", sub: "", color: "text-red-400" },
+                { label: "Hit Points", value: "8", sub: "", color: "text-red-400" },
+                { label: "Initiative", value: "+5", sub: "", color: "text-red-400" },
+                
+            ],
+            abilityScores: { STR: 8, DEX: 16, CON: 14, INT: 17, WIS: 10, CHA: 8 },
+            spellSlots: { level1: 1, level2: 3, note: "" } // Archmage-level power
+        };
+
+        // --- Music Control Functions ---
+        function setupMusicPlayer() {
+            scIframe = document.getElementById('sc-iframe');
+            if (!scIframe) return console.error("SoundCloud iframe not found.");
+
+            const widgetApiUrl = new URL(scIframe.src).origin;
+            
+            function sendCommand(method) {
+                if (scIframe && scIframe.contentWindow) {
+                    scIframe.contentWindow.postMessage(`{"method":"${method}"}`, widgetApiUrl);
+                } else {
+                    console.warn("SoundCloud iframe not ready for postMessage.");
+                }
+            }
+
+            window.playMusic = () => { if (!isMusicPlaying) { sendCommand('play'); isMusicPlaying = true; updateMusicWidget(); } };
+            window.pauseMusic = () => { if (isMusicPlaying) { sendCommand('pause'); isMusicPlaying = false; updateMusicWidget(); } };
+            window.toggleMusic = () => isMusicPlaying ? pauseMusic() : playMusic();
+        }
+
+        function updateMusicWidget() {
+            const statusSpan = document.getElementById('music-status');
+            const iconContainer = document.getElementById('musicButton');
+            const musicIcon = iconContainer.querySelector('[data-lucide]');
+
+            // Remove existing icon
+            if (musicIcon) musicIcon.remove();
+
+            if (isMusicPlaying) {
+                statusSpan.innerText = "PLAYING";
+                statusSpan.classList.remove('text-gray-500');
+                statusSpan.classList.add('text-green-400');
+                
+                // Pause Icon
+                iconContainer.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+                iconContainer.classList.add('bg-green-600', 'hover:bg-green-500');
+                iconContainer.innerHTML = '<i data-lucide="pause" class="w-3 h-3 text-white fill-white"></i>';
+
+            } else {
+                statusSpan.innerText = "PAUSED";
+                statusSpan.classList.remove('text-green-400');
+                statusSpan.classList.add('text-gray-500');
+                
+                // Play Icon
+                iconContainer.classList.remove('bg-green-600', 'hover:bg-green-500');
+                iconContainer.classList.add('bg-blue-600', 'hover:bg-blue-500');
+                iconContainer.innerHTML = '<i data-lucide="play" class="w-3 h-3 text-white fill-white"></i>';
+            }
+            lucide.createIcons();
+        }
+        
+        // --- Dynamic Rendering Functions ---
+
+        function renderIdentity(data) {
+            const raceBox = document.getElementById('raceBox');
+            const backgroundBox = document.getElementById('backgroundBox');
+            const levelBox = document.getElementById('levelBox');
+            const alignmentBox = document.getElementById('alignmentBox');
+            const themeClass = isRevealed ? 'text-glow-truth' : 'text-glow-illusion';
+            const borderColor = isRevealed ? 'border-red-600' : 'border-blue-600';
+            const textColor = isRevealed ? 'text-red-300' : 'text-blue-300';
+            const hoverColor = isRevealed ? 'hover:border-red-400' : 'hover:border-blue-400';
+
+            raceBox.innerHTML = `
+                <p class="text-xs uppercase tracking-wider stat-label mb-1">Race</p>
+                <p class="text-2xl font-bold ${textColor} ${themeClass}">${data.race}</p>
+            `;
+            raceBox.className = `p-4 rounded-xl border-l-4 border-r-2 transition-all duration-500 bg-gray-900/40 text-center shadow-inner ${borderColor} ${hoverColor}`;
+
+            backgroundBox.innerHTML = `
+                <p class="text-xs uppercase tracking-wider stat-label mb-1">Class</p>
+                <p class="text-2xl font-bold ${textColor} ${themeClass}">${data.class}</p>
+            `;
+            backgroundBox.className = `p-4 rounded-xl border-l-4 border-r-2 transition-all duration-500 bg-gray-900/40 text-center shadow-inner ${borderColor} ${hoverColor}`;
+            levelBox.innerHTML = `
+                <p class="text-xs uppercase tracking-wider stat-label mb-1">Level</p>
+                <p class="text-2xl font-bold ${textColor} ${themeClass}">${data.level}</p>
+            `;
+            levelBox.className = `p-4 rounded-xl border-l-4 border-r-2 transition-all duration-500 bg-gray-900/40 text-center shadow-inner ${borderColor} ${hoverColor}`;
+            alignmentBox.innerHTML = `
+                <p class="text-xs uppercase tracking-wider stat-label mb-1">Alignment</p>
+                <p class="text-2xl font-bold ${textColor} ${themeClass}">${data.alignment}</p>
+            `;
+            alignmentBox.className = `p-4 rounded-xl border-l-4 border-r-2 transition-all duration-500 bg-gray-900/40 text-center shadow-inner ${borderColor} ${hoverColor}`;
+        }
+
+
+        function renderAbilityScores(scores) {
+            const container = document.querySelector('#statsSection .grid-cols-3');
+            container.innerHTML = Object.entries(scores).map(([key, value]) => {
+                const modifier = Math.floor((value - 10) / 2);
+                const modifierSign = modifier >= 0 ? '+' : '';
+                const themeClass = isRevealed ? 'glow-text-truth' : 'glow-text-illusion';
+
+                return `
+                    <div class="p-2 rounded-lg border border-gray-800 bg-black/30">
+                        <p class="stat-label text-xs uppercase">${key}</p>
+                        <p class="text-2xl font-bold ${themeClass}">${value}</p>
+                        <p class="text-sm text-gray-400">${modifierSign}${modifier}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCombatStats(stats) {
+            const container = document.querySelector('#statsSection .grid-cols-2');
+            container.innerHTML = stats.map(stat => {
+                const themeClass = isRevealed ? 'text-glow-truth' : 'text-glow-illusion';
+                const bgClass = isRevealed ? 'bg-red-900/10' : 'bg-blue-900/10';
+                return `
+                    <div class="p-3 rounded-lg border border-gray-900 ${bgClass}">
+                        <p class="stat-label text-xs uppercase mb-1">${stat.label}</p>
+                        <p class="text-2xl font-bold ${themeClass}">${stat.value}</p>
+                        <p class="text-xs italic text-gray-500">${stat.sub}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderEphemeralMechanics() {
+            const container = document.getElementById('buffDebuffContainer');
+            const buffTheme = isRevealed ? 'border-green-400 bg-green-900/20' : 'border-blue-600 bg-blue-900/10';
+            const debuffTheme = isRevealed ? 'border-red-400 bg-red-900/20' : 'border-red-600 bg-red-900/10';
+            const costTextColor = isRevealed ? 'text-red-300' : 'text-blue-300';
+            const buffColor = isRevealed ? 'text-green-300' : 'text-blue-300';
+            const debuffColor = isRevealed ? 'text-red-300' : 'text-red-300';
+
+            container.innerHTML = `
+                <!-- Buff: Energy Casting -->
+                <div class="p-4 rounded-lg border-l-4 ${buffTheme} transition-colors duration-500 shadow-md">
+                    <h4 class="text-xl font-semibold mb-1 ${buffColor}">${buffDebuffContent.buff.title}</h4>
+                    <p class="text-sm italic text-gray-400 mb-2">${buffDebuffContent.buff.description}</p>
+                    <div class="text-sm">
+                        <strong class="${costTextColor}">Cena:</strong> 
+                        ${buffDebuffContent.buff.cost}
+                    </div>
+                </div>
+
+                <!-- Debuff: Healing Restriction -->
+                <div class="p-4 rounded-lg border-l-4 ${debuffTheme} transition-colors duration-500 shadow-md">
+                    <h4 class="text-xl font-semibold mb-1 ${debuffColor}">${buffDebuffContent.debuff.title}</h4>
+                    <p class="text-sm italic text-gray-400 mb-2">${buffDebuffContent.debuff.description}</p>
+                    <div class="text-sm">
+                        <strong class="${costTextColor}">Obmedzenie:</strong> 
+                        ${buffDebuffContent.debuff.restriction}
+                    </div>
+                </div>
+            `;
+            
+            // Ensure the section header updates its glow color
+            const sectionHeader = document.querySelector('#ephemeralSection h3');
+            const oppositeTheme = isRevealed ? 'illusion' : 'truth';
+            const currentTheme = isRevealed ? 'truth' : 'illusion';
+
+            sectionHeader.classList.remove(`glow-text-${oppositeTheme}`);
+            sectionHeader.classList.add(`glow-text-${currentTheme}`);
+        }
+
+        function renderFeatsSkills(data){
+            const themeClass = isRevealed ? 'text-glow-truth' : 'text-glow-illusion';
+            const currentThemeClass = isRevealed ? 'glow-text-truth' : 'glow-text-illusion';
+            const defaultThemeClass = isRevealed ? 'glow-text-illusion' : 'glow-text-truth';
+
+            const featContainer = document.getElementById('featsSkills');
+            featContainer.innerHTML = data.feats.map(feat => `
+                <div class="p-2 rounded bg-gray-900/30 border-l-4 border-gray-700 hover:border-blue-600 transition-colors">
+                    <p class="font-semibold text-gray-100">${feat.name}</p>
+                    <p class="text-xs italic text-gray-500">${feat.desc}</p>
+                </div>
+            `).join('');
+        }
+        function renderSpells(data, slots) {
+            const themeClass = isRevealed ? 'text-glow-truth' : 'text-glow-illusion';
+            const currentThemeClass = isRevealed ? 'glow-text-truth' : 'glow-text-illusion';
+            const defaultThemeClass = isRevealed ? 'glow-text-illusion' : 'glow-text-truth';
+
+
+            // 1. Render Cantrips
+            const cantripContainer = document.getElementById('cantripList');
+            cantripContainer.innerHTML = data.cantrips.map(cantrip => `
+                <div class="p-2 rounded bg-gray-900/30 border-l-4 border-gray-700 hover:border-blue-600 transition-colors">
+                    <p class="font-semibold text-gray-100">${cantrip.name}</p>
+                </div>
+            `).join('');
+            
+            // 2. Render 1st-Level Spells
+            const spellContainer = document.getElementById('spellList');
+            spellContainer.innerHTML = data.spells.map(spell => `
+                <div class="p-2 rounded bg-gray-900/30 border-l-4 border-gray-700 hover:border-blue-600 transition-colors">
+                    <p class="font-semibold text-gray-100">${spell.name} ${spell.ritual ? '<span class="text-xs italic text-blue-400">(R)</span>' : ''}</p>
+                    <p class="text-xs italic text-gray-500">Level ${spell.level}</p>
+                </div>
+            `).join('');
+            
+            // 3. Render Spell Slots
+            const slotContainer = document.getElementById('spellSlots');
+            slotContainer.innerHTML = `
+                <h4 class="text-lg font-semibold mb-2 text-white">Spell Slots</h4>
+                <div class="flex flex-wrap gap-4 text-center">
+                    <div class="p-3 rounded-lg border border-gray-700 bg-black/50 min-w-[6rem]">
+                        <p class="stat-label text-xs uppercase">Level 1</p>
+                        <p class="text-xl font-bold ${themeClass}">${slots.level1}</p>
+                    </div>
+                    
+                </div>
+                <p class="text-xs italic text-gray-500 mt-2">${slots.note}</p>
+            `;
+            
+            // Apply new glow theme to headers
+            const magicHeaders = document.querySelectorAll('#magicSection .glow-text-illusion, #magicSection .glow-text-truth');
+            magicHeaders.forEach(header => {
+                header.classList.remove(defaultThemeClass);
+                header.classList.add(currentThemeClass);
+            });
+        }
+        
+        // --- Main Toggle Function (Illusion/Truth) ---
+
+        window.toggleTruth = function() {
+            isRevealed = !isRevealed;
+            const data = isRevealed ? truePersona : publicPersona;
+            const oppositeTheme = isRevealed ? 'illusion' : 'truth';
+            const currentTheme = isRevealed ? 'truth' : 'illusion';
+
+            // DOM Elements
+            const nameTitle = document.getElementById('charName');
+            const charTitle = document.getElementById('charTitle');
+            const quoteText = document.getElementById('quoteText');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const storyContent = document.getElementById('storyContent');
+            const toggleLabel = document.getElementById('toggleLabel');
+            const dividers = document.querySelectorAll('.divider');
+            const glowElements = document.querySelectorAll(`[class*="glow-text-"]`);
+
+            // 1. Update Text Content
+            nameTitle.innerText = data.name;
+            charTitle.innerText = data.title;
+            quoteText.innerText = data.quote;
+            storyContent.innerHTML = data.story;
+            toggleLabel.innerText = isRevealed ? 'Reveal Illusion' : 'Dispel Illusion';
+
+            // 2. Update Identity, Stats, Magic & Mechanics
+            renderIdentity(data); // <-- NEW IDENTITY RENDER CALL
+            renderAbilityScores(data.abilityScores);
+            renderCombatStats(data.combatStats);
+            renderEphemeralMechanics();
+            renderFeatsSkills(featsAndSkills);
+            renderSpells(spellsAndCantrips, data.spellSlots);
+
+
+            // 3. Update Visual Theme
+            glowElements.forEach(el => {
+                el.classList.remove(`glow-text-${oppositeTheme}`);
+                el.classList.add(`glow-text-${currentTheme}`);
+            });
+
+            dividers.forEach(div => {
+                const style = isRevealed ? '#cc0000' : '#004d99';
+                div.style.background = `linear-gradient(to right, transparent, ${style}, transparent)`;
+            });
+
+            // Update Icon color and Main Container Glow/Border
+            eyeIcon.classList.remove('text-blue-500', 'text-red-500');
+            eyeIcon.classList.add(isRevealed ? 'text-red-500' : 'text-blue-500');
+            
+            document.getElementById('mainContainer').style.borderColor = isRevealed ? '#cc0000' : '#004d99';
+            document.getElementById('mainContainer').style.boxShadow = isRevealed 
+                ? '0 0 15px rgba(255, 77, 77, 0.4), 0 0 40px rgba(0, 0, 0, 0.8)'
+                : '0 0 15px rgba(0, 100, 255, 0.4), 0 0 40px rgba(0, 0, 0, 0.8)';
+            
+            quoteText.classList.remove('border-blue-700', 'border-red-700');
+            quoteText.classList.add(isRevealed ? 'border-red-700' : 'border-blue-700');
+        }
+
+        // Initial Setup on load
+        window.onload = function() {
+            setupMusicPlayer();
+            // Run twice to ensure all initial data is loaded and the illusion state is correctly set to default (false)
+            toggleTruth(); 
+            isRevealed = true; 
+            toggleTruth(); 
+            updateMusicWidget(); 
+        };
+    </script>
+
+     </div> <!-- Close mainContainer -->
+    </div> <!-- Close centering wrapper -->
+
+    <script>
+</body>
+</html>
