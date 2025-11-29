@@ -1,0 +1,68 @@
+body {
+  display: block;
+  font-family: "Cinzel", serif;
+  background-color: #0d0a15;
+  background-image: url("");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #d4d4d4;
+}
+
+/* Hlavny blok */
+.scroll-bg {
+  background-color: rgba(10, 10, 25, 0.95);
+  box-shadow:
+    0 0 15px rgba(0, 100, 255, 0.4),
+    0 0 40px rgba(0, 0, 0, 0.8);
+  border: 2px solid #004d99;
+  transition: all 0.5s ease-in-out;
+}
+
+/* Modra */
+.glow-text-illusion {
+  color: #4a90e2;
+  text-shadow: 0 0 8px rgba(74, 144, 226, 0.7);
+  transition: all 0.5s ease-in-out;
+}
+
+/* Cervena */
+.glow-text-truth {
+  color: #ff4d4d;
+  text-shadow: 0 0 8px rgba(255, 77, 77, 0.9);
+  transition: all 0.5s ease-in-out;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #004d99, transparent);
+  transition: all 0.5s ease-in-out;
+}
+
+.stat-label {
+  color: #a0a0a0;
+}
+
+.covert-indicator {
+  border-left-color: #00bfff; /* Ciarkovany kraj */
+  background-color: rgba(0, 0, 50, 0.5); /* Velmi modra*/
+  color: #b0e0e6; /* svetly text */
+  transition: all 0.5s ease-in-out;
+}
+
+/* Sam neviem */
+.content-transition {
+  transition: opacity 0.4s ease-out;
+}
+
+/* glow pisma*/
+.text-glow-illusion {
+  color: #60a5fa;
+}
+.text-glow-truth {
+  color: #f87171;
+}
+#mainContainer {
+  margin: 0 auto; /* Vycentruje to*/
+}
