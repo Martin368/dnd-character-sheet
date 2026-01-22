@@ -5,6 +5,10 @@ let isRevealed = false;
 let isMusicPlaying = false;
 let scIframe;
 
+const tracks = {
+  illusion: "audio/song1.mp3",
+  truth: "audio/song2.mp3",
+};
 // --- Definicie dat ---
 
 const featsAndSkills = {
@@ -137,68 +141,30 @@ const truePersona = {
   },
 };
 
-// --- Kontrola hudby ---
-function setupMusicPlayer() {
-  scIframe = document.getElementById("sc-iframe");
-  if (!scIframe) return console.error("SoundCloud iframe not found.");
-
-  const widgetApiUrl = new URL(scIframe.src).origin;
-
-  function sendCommand(method) {
-    if (scIframe && scIframe.contentWindow) {
-      scIframe.contentWindow.postMessage(
-        `{"method":"${method}"}`,
-        widgetApiUrl
-      );
-    } else {
-      console.warn("SoundCloud iframe not ready for postMessage.");
-    }
-  }
-
-  window.playMusic = () => {
-    if (!isMusicPlaying) {
-      sendCommand("play");
-      isMusicPlaying = true;
-      updateMusicWidget();
-    }
-  };
-  window.pauseMusic = () => {
-    if (isMusicPlaying) {
-      sendCommand("pause");
-      isMusicPlaying = false;
-      updateMusicWidget();
-    }
-  };
-  window.toggleMusic = () => (isMusicPlaying ? pauseMusic() : playMusic());
-}
-
-function updateMusicWidget() {
-  const statusSpan = document.getElementById("music-status");
-  const iconContainer = document.getElementById("musicButton");
-  const musicIcon = iconContainer.querySelector("[data-lucide]");
-
-  // Toto schova soundcloud ikonu
-  if (musicIcon) musicIcon.remove();
-
+window.toggleMusic = function () {
+  const audio = document.getElementById("main-audio");
   if (isMusicPlaying) {
-    statusSpan.innerText = "PLAYING";
-    statusSpan.classList.remove("text-gray-500");
-    statusSpan.classList.add("text-green-400");
+    audio.pause();
+    isMusicPlaying = false;
+  } else {
+    audio.play().catch((e) => console.log("Interaction needed for play"));
+    isMusicPlaying = true;
+  }
+  updateMusicUI();
+};
 
-    // Ikona Pauzy
-    iconContainer.classList.remove("bg-blue-600", "hover:bg-blue-500");
-    iconContainer.classList.add("bg-green-600", "hover:bg-green-500");
-    iconContainer.innerHTML =
+function updateMusicUI() {
+  const status = document.getElementById("music-status");
+  const btn = document.getElementById("musicButton");
+  if (isMusicPlaying) {
+    status.innerText = "PLAYING";
+    status.className = "text-xs italic text-green-400 hidden md:block";
+    btn.innerHTML =
       '<i data-lucide="pause" class="w-3 h-3 text-white fill-white"></i>';
   } else {
-    statusSpan.innerText = "PAUSED";
-    statusSpan.classList.remove("text-green-400");
-    statusSpan.classList.add("text-gray-500");
-
-    // Ikona play
-    iconContainer.classList.remove("bg-green-600", "hover:bg-green-500");
-    iconContainer.classList.add("bg-blue-600", "hover:bg-blue-500");
-    iconContainer.innerHTML =
+    status.innerText = "PAUSED";
+    status.className = "text-xs italic text-gray-500 hidden md:block";
+    btn.innerHTML =
       '<i data-lucide="play" class="w-3 h-3 text-white fill-white"></i>';
   }
   lucide.createIcons();
@@ -337,7 +303,7 @@ function renderFeatsSkills(data) {
                     <p class="font-semibold text-gray-100">${feat.name}</p>
                     <p class="text-xs italic text-gray-500">${feat.desc}</p>
                 </div>
-            `
+            `,
     )
     .join("");
 }
@@ -358,7 +324,7 @@ function renderSpells(data, slots) {
                 <div class="p-2 rounded bg-gray-900/30 border-l-4 border-gray-700 hover:border-blue-600 transition-colors">
                     <p class="font-semibold text-gray-100">${cantrip.name}</p>
                 </div>
-            `
+            `,
     )
     .join("");
 
@@ -371,7 +337,7 @@ function renderSpells(data, slots) {
                     <p class="font-semibold text-gray-100">${spell.name} ${spell.ritual ? '<span class="text-xs italic text-blue-400">(R)</span>' : ""}</p>
                     <p class="text-xs italic text-gray-500">Level ${spell.level}</p>
                 </div>
-            `
+            `,
     )
     .join("");
 
@@ -391,7 +357,7 @@ function renderSpells(data, slots) {
 
   // Vysvieti nadpis
   const magicHeaders = document.querySelectorAll(
-    "#magicSection .glow-text-illusion, #magicSection .glow-text-truth"
+    "#magicSection .glow-text-illusion, #magicSection .glow-text-truth",
   );
   magicHeaders.forEach((header) => {
     header.classList.remove(defaultThemeClass);
@@ -404,8 +370,8 @@ function renderSpells(data, slots) {
 window.toggleTruth = function () {
   isRevealed = !isRevealed;
   const data = isRevealed ? truePersona : publicPersona;
-  const oppositeTheme = isRevealed ? "illusion" : "truth";
   const currentTheme = isRevealed ? "truth" : "illusion";
+  const oppositeTheme = isRevealed ? "illusion" : "truth";
 
   // DOM (Document object model) Elementy
   const nameTitle = document.getElementById("charName");
@@ -416,6 +382,18 @@ window.toggleTruth = function () {
   const toggleLabel = document.getElementById("toggleLabel");
   const dividers = document.querySelectorAll(".divider");
   const glowElements = document.querySelectorAll(`[class*="glow-text-"]`);
+
+  const audio = document.getElementById("main-audio");
+  const newTrack = isRevealed ? tracks.truth : tracks.illusion;
+
+  // Update a Reload
+  audio.src = newTrack;
+  audio.load(); 
+
+  
+  if (isMusicPlaying) {
+    audio.play();
+  }
 
   // 1. Updatne header
   nameTitle.innerText = data.name;
@@ -460,10 +438,9 @@ window.toggleTruth = function () {
 
 //
 window.onload = function () {
-  setupMusicPlayer();
   // pre istotu dvakrat, obcas blbne
   toggleTruth();
   isRevealed = true;
   toggleTruth();
-  updateMusicWidget();
+  updateMusicUI();
 };
